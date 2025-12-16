@@ -8,11 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import yandex.model.Order;
 
 import java.util.List;
 
+import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.hamcrest.Matchers.*;
-
 
 @RunWith(Parameterized.class)
 public class OrderCreationTest {
@@ -51,7 +52,7 @@ public class OrderCreationTest {
 
         response.then()
                 .assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .body("track", notNullValue())
                 .body("track", greaterThan(0));
     }

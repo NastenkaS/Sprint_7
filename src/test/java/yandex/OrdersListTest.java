@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.*;
 
 public class OrdersListTest {
@@ -26,7 +27,7 @@ public class OrdersListTest {
 
         response.then()
                 .assertThat()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("orders", notNullValue())
                 .body("orders", isA(java.util.List.class))
                 .body("orders", not(empty()));
@@ -40,7 +41,7 @@ public class OrdersListTest {
 
         response.then()
                 .assertThat()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("orders", notNullValue())
                 .body("pageInfo", notNullValue())
                 .body("pageInfo.page", notNullValue())
@@ -56,7 +57,7 @@ public class OrdersListTest {
 
         response.then()
                 .assertThat()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .body("orders", hasSize(greaterThan(0)));
     }
 }

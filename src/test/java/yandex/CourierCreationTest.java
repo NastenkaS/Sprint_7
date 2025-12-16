@@ -7,8 +7,11 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import yandex.model.*;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
+import static yandex.DataGenerator.getRandomCourier;
 
 public class CourierCreationTest {
     private CourierClient courierClient;
@@ -33,13 +36,13 @@ public class CourierCreationTest {
     @DisplayName("Создание курьера с валидными данными")
     @Description("Проверка успешного создания курьера со всеми обязательными полями")
     public void courierCanBeCreatedTest() {
-        courier = DataGenerator.getRandomCourier();
+        courier = getRandomCourier();
 
         Response response = courierClient.createCourier(courier);
 
         response.then()
                 .assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .body("ok", equalTo(true));
 
         CourierCredentials credentials = new CourierCredentials(courier.getLogin(), courier.getPassword());
@@ -50,10 +53,10 @@ public class CourierCreationTest {
     @DisplayName("Создание двух одинаковых курьеров")
     @Description("Проверка, что нельзя создать двух курьеров с одинаковым логином")
     public void cannotCreateDuplicateCourierTest() {
-        courier = DataGenerator.getRandomCourier();
+        courier = getRandomCourier();
 
         Response firstResponse = courierClient.createCourier(courier);
-        firstResponse.then().statusCode(201);
+        firstResponse.then().statusCode(SC_CREATED);
 
         CourierCredentials credentials = new CourierCredentials(courier.getLogin(), courier.getPassword());
         courierId = courierClient.loginAndGetId(credentials);
@@ -62,7 +65,7 @@ public class CourierCreationTest {
 
         secondResponse.then()
                 .assertThat()
-                .statusCode(409)
+                .statusCode(SC_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
 
@@ -76,7 +79,7 @@ public class CourierCreationTest {
 
         response.then()
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
@@ -90,7 +93,7 @@ public class CourierCreationTest {
 
         response.then()
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
@@ -104,10 +107,9 @@ public class CourierCreationTest {
 
         response.then()
                 .assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .body("ok", equalTo(true));
 
-        // Сохраняем ID для удаления
         CourierCredentials credentials = new CourierCredentials(courier.getLogin(), courier.getPassword());
         courierId = courierClient.loginAndGetId(credentials);
     }
@@ -116,9 +118,9 @@ public class CourierCreationTest {
     @DisplayName("Создание курьера с существующим логином")
     @Description("Проверка ошибки при создании курьера с уже существующим логином")
     public void cannotCreateCourierWithExistingLoginTest() {
-        courier = DataGenerator.getRandomCourier();
+        courier = getRandomCourier();
 
-        courierClient.createCourier(courier).then().statusCode(201);
+        courierClient.createCourier(courier).then().statusCode(SC_CREATED);
 
         CourierCredentials credentials = new CourierCredentials(courier.getLogin(), courier.getPassword());
         courierId = courierClient.loginAndGetId(credentials);
@@ -128,7 +130,7 @@ public class CourierCreationTest {
 
         response.then()
                 .assertThat()
-                .statusCode(409)
+                .statusCode(SC_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
 }

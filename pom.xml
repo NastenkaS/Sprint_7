@@ -17,6 +17,8 @@
         <junit.version>4.13.2</junit.version>
         <rest-assured.version>5.1.1</rest-assured.version>
         <gson.version>2.10.1</gson.version>
+        <lombok.version>1.18.24</lombok.version>
+        <apache-httpcomponents.version>4.5.13</apache-httpcomponents.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <allure-maven-plugin.version>2.11.2</allure-maven-plugin.version>
@@ -49,6 +51,18 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${apache-httpcomponents.version}</version>
         </dependency>
     </dependencies>
 
